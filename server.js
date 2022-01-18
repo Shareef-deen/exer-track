@@ -39,6 +39,14 @@ app.get('/api/users', (res, req)=>{
   })
 })
 
+app.get('/api/exercise/users', function(req, res) {
+  username.find({}, function(err, data) {
+    if (!err) {
+      return res.json(data);
+    }
+  });
+});
+
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
