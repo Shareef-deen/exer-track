@@ -30,7 +30,7 @@ app.post('/api/users', (req, res)=>{
 })
 
 app.get('/api/users', (res, req)=>{
-  username.find({}).toArray((err, data)=>{
+  username.find({}, (err, data)=>{
     if(err) return console.error(err);
     else {
     res.send(JSON.stringify(data));
