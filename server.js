@@ -31,7 +31,7 @@ app.post('/api/users', (req, res)=>{
 
 app.get('/api/users', (res, req)=>{
   username.find({}).toArray((err, data)=>{
-    if(err) return console.error(err);
+    if(err) return console.error("error");
     consle.log(data)  
   })
 })
