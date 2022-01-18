@@ -40,6 +40,12 @@ app.post('/api/users', (req, res)=>{
 
 
 */
+app.get('/api/users', (req, res)=>{
+  username.find({}, (err, data)=>{
+    if(err) return console.error(err);
+    res.send(data);
+  })
+})
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
