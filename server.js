@@ -43,7 +43,10 @@ app.post('/api/users', (req, res)=>{
 app.get('/api/users', (req, res)=>{
   username.find({}, (err, data)=>{
     if(err) return console.error(err);
-    res.send(data);
+    else{
+      const staff = JSON.stringify(data);
+      res.send(staff);
+    }
   })
 })
 
