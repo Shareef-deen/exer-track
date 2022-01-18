@@ -29,7 +29,7 @@ app.post('/api/users', (req, res)=>{
   })
 })
 
-app.get('/api/users', (req, res)=>{
+/*app.get('/api/users', (req, res)=>{
   username.find({}).toArray(err, data)=>{
     if(err) return console.error(err);
     else {
@@ -39,7 +39,7 @@ app.get('/api/users', (req, res)=>{
 })
 
 
-
+*/
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
