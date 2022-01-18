@@ -29,23 +29,16 @@ app.post('/api/users', (req, res)=>{
   })
 })
 
-app.get('/api/users', (res, req)=>{
-  username.find({}, (err, data)=>{
+app.get('/api/users', (req, res)=>{
+  username.find({}).toArray(err, data)=>{
     if(err) return console.error(err);
     else {
-    //res.send(JSON.stringify(data));
-      res.send(data)
+    res.send(JSON.stringify(data));
     }
   })
 })
 
-app.get('/api/exercise/users', function(req, res) {
-  username.find({}, function(err, data) {
-    if (!err) {
-      return res.json(data);
-    }
-  });
-});
+
 
 
 
