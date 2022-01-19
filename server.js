@@ -327,8 +327,7 @@ actual.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date:
         "date":date,
         "duration":dur,"description": des
 }*/
-     res.json(data);
-  }
+     res.json({"id": id, "username": data.username, "date": date, "duration": parseInt(dur), "description": des});  }
   
 })
 /*multi.create({userid: id, description: des, duration: dur, date: date}, (err, data)=>{
