@@ -249,9 +249,6 @@ actual.findByIdAndUpdate(id,{$push:{description: des, duration: dur, date: date}
   }
 })*/
 
-
-
-
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -269,7 +266,6 @@ mongoose.connect(process.env.DB_PASS, { useNewUrlParser: true, useUnifiedTopolog
 //other one
 const plentyshcema = new Schema({
   username: String,
-  userid: String,
   description: String,
   duration: Number,
   date: { type: Date, default: Date.now }
@@ -319,19 +315,19 @@ console.log(id)
     date = new Date(date).toDateString()
   }
 
-//var expo = {description: des,duration: dur,date: date}
+// var expo = {description: des,duration: dur,date: date}
 
-actual.findByIdAndUpdate(id,{$push:{description: des, duration: dur, date: date}},{ "new": true, "upsert": true},(err, data)=>{
+actual.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: date}},{"new": true, "upsert": true},(err, data)=>{
   if (err) return console.error(err);
   else{
     
-    let returnObj ={
-        "_id":id,
+/*let returnObj ={
+        "id":id,
         "username":data.username,
         "date":date,
         "duration":dur,"description": des
-    }
-     res.json(returnObj);
+}*/
+     res.json(data);
   }
   
 })
