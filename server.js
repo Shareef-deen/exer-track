@@ -69,31 +69,11 @@ console.log(id)
 actual.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: date}},{"new": true, "upsert": true},(err, data)=>{
   if (err) return console.error(err);
   else{
-    
-/*let returnObj ={
-        "id":id,
-        "username":data.username,
-        "date":date,
-        "duration":dur,"description": des
-}*/
+   
      res.json({"username": data.username, "description": des, "duration": parseInt(dur), "date": date,"_id": id});
   }
   
 })
-/*multi.create({userid: id, description: des, duration: dur, date: date}, (err, data)=>{
-  if (err) return console.error(err);
-  else{
-    
-    let returnObj ={
-        "_id":Id,
-        "username":updatedUser.username,
-        "date":expObj.date,
-        "duration":parseInt(expObj.duration),"description":expObj.description
-    }
-    
-     res.json(data);
-  }
-})*/
 
 })
 
