@@ -249,13 +249,8 @@ actual.findByIdAndUpdate(id,{$push:{description: des, duration: dur, date: date}
   }
 })*/
 
-})
 
 
-
-const listener = app.listen(process.env.PORT || 3000, () => {
-  console.log('Your app is listening on port ' + listener.address().port)
-})
 
 const express = require('express')
 const app = express()
@@ -362,5 +357,3 @@ actual.findByIdAndUpdate(id,{$push:{description: des, duration: dur, date: date}
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })
-
-
