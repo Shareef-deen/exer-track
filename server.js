@@ -125,11 +125,18 @@ app.get('/api/users', (req, res)=>{
 })
 
 app.post('/api/users/:_id/exercises', (req, res)=>{
-const id = req.body[':_id'];
+//const id = req.body[':_id'];
+const id = req.params._id;
 const des = req.body.description;
 const dur = req.body.duration;
-const date = req.body.date;
+let date = req.body.date;
 console.log(id)
+ if (date === "" || "undefined"){
+    date = new Date().toDateString()
+  } else {
+    date = new Date(date).toDateString()
+  }
+
 multi.create({userid: id, description: des, duration: dur, date: date}, (err, data)=>{
   if (err) return console.error(err);
   else{
