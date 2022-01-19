@@ -310,9 +310,9 @@ const dur = req.body.duration;
 let date = req.body.date;
 console.log(id)
  if (date === "" || "undefined"){
-    date = new Date().toDateString()
+    date = new Date()//.toDateString()
   } else {
-    date = new Date(date).toDateString()
+    date = new Date(date)//.toDateString()
   }
 
 // var expo = {description: des,duration: dur,date: date}
