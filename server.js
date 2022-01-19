@@ -133,7 +133,7 @@ console.log(id)
 multi.create({userid: id, description: des, duration: dur, date: date}, (err, data)=>{
   if (err) return console.error(err);
   else{
-    res.send(data);
+    res.json(data);
   }
 })
 
