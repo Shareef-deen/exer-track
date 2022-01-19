@@ -50,6 +50,21 @@ app.get('/api/users', (req, res)=>{
   })
 })
 
+app.post('/api/users/:_id/exercises', (req, res)=>{
+const id = req.body[':_id'];
+const des = req.body.description;
+const dur = req.body.duration;
+const date = req.body.date;
+console.log(id)
+multi.create({userid: id, description: des, duration: dur, date: date}, (err, data)=>{
+  if (err) return console.error(err);
+  else{
+    res.send(data);
+  }
+})
+
+})
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
