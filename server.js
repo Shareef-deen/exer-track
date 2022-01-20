@@ -81,6 +81,50 @@ more.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: d
 })
 
 app.get('/api/users/:_id/logs', (req, res)=>{
+  const id = req.params._id;
+  const {from, to, limit} = req.query;
+  more.findById(id, (err, userData)=>{
+    if (err) return console.error(err);
+    else{
+      let dateObj = {};
+      if (from) {
+        dateObj["$gte"] = new Date(from);
+      }
+
+      if(to) {
+        dateObj["$lte"] = new Date(to);
+      }
+
+      let filter = {
+        userid: id
+      }
+
+      if(from || to ) {
+        filter.date = dateObj;
+      }
+
+      let nonNullLimit = limit ? limit : 500
+      more.find(filter).limit(+nonNullLimit).exec((err, data)=>{
+        if(err || !data){
+          res.json({error: "error"})
+        } 
+        else {
+          const count = data.length;
+          const rawLog = data
+          const {username, _id}= userData
+          const log = rawLog.map((l) => ({
+            description: l.description,
+            duration: parseInt(l.duration),
+            date: l.date.toDateString
+          }))
+          res.json({username, count, _id,log})
+        }
+      })
+
+    }
+  })
+
+
   
 })
 
