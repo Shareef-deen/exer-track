@@ -17,10 +17,10 @@ const plentyshcema = new Schema({
   username: String,
   description: String,
   duration: Number,
-  date: { type: Date, default: Date.now }
+  date: { type: Date}
 
 })
-const actual = mongoose.model("actual", plentyshcema);
+const more = mongoose.model("moer", plentyshcema);
 
 
 app.use(cors())
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 app.post('/api/users', (req, res)=>{
   console.log(req.body.username);
   const user = req.body.username;
-  actual.create({username: user}, (err, data)=>{
+  more.create({username: user}, (err, data)=>{
     if (err) return console.error(err);
     res.send(data);
   })
@@ -42,7 +42,7 @@ app.post('/api/users', (req, res)=>{
 
 
 app.get('/api/users', (req, res)=>{
-  actual.find({}, (err, data)=>{
+  more.find({}, (err, data)=>{
     if(err) return console.error(err);
     else{
       const staff = JSON.stringify(data);
@@ -58,26 +58,31 @@ const des = req.body.description;
 const dur = req.body.duration;
 let date = req.body.date;
 console.log(id)
- if (date === "" || "undefined"){
+ if (date === ""/* || isNaN(date)*/){
     date = new Date().toDateString()
   } else {
     date = new Date(date).toDateString()
   }
 
-// var expo = {description: des,duration: dur,date: date}
 
-actual.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: date}},{"new": true, "upsert": true},(err, data)=>{
+
+more.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: date}},{"new": true, "upsert": true},(err, data)=>{
   if (err) return console.error(err);
   else{
-   
-     res.json({"username": data.username, "description": des, "duration": parseInt(dur), "date": date,"_id": id});
+    
+     res.send({
+       username: data.username,
+       description: des,
+       duration: parseInt(dur),
+       date: date,_id: id});
   }
   
 })
-
 })
 
-
+app.get('/api/users/:_id/logs', (req, res)=>{
+  
+})
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
