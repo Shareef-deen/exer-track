@@ -101,6 +101,7 @@ users.findById(id, (err, userData)=>{
 
 })
 
+/*
 app.get('/api/users/:_id/logs', (req, res)=>{
   const id = req.params._id;
   const {from, to, limit} = req.query;
@@ -147,7 +148,78 @@ app.get('/api/users/:_id/logs', (req, res)=>{
   })
 })
 
+*/
+app.get('/api/users/:_id/logs', (req, res) => {
+  const { from, to, limit } = req.query;
+  let idJson = { "id": req.params._id };
+  let idToCheck = idJson.id;
 
+  // Check ID
+  users.findById(idToCheck, (err, data) => {
+    var query = {
+      username: data.username
+    }
+
+    if (from !== undefined && to === undefined) {
+      query.date = { $gte: new Date(from)}
+    } else if (to !== undefined && from === undefined) {
+      query.date = { $lte: new Date(to) }
+    } else if (from !== undefined && to !== undefined) {
+      query.date = { $gte: new Date(from), $lte: new Date(to)}
+    }
+
+  let limitChecker = (limit) => {
+    let maxLimit = 100;
+    if (limit) {
+      return limit;
+    } else {
+      return maxLimit
+    }
+  }
+
+  if (err) {
+    console.log("error with ID=> ", err)
+  } else {
+
+    exercise.find((query), null, {limit: limitChecker(+limit)}, (err, docs) => {
+      let loggedArray = [];
+      if (err) {
+        console.log("error with query=> ", err);
+      } else {
+
+        let documents = docs;
+        let loggedArray = documents.map((item) => {
+          return {
+            "description": item.description,
+            "duration": item.duration,
+            "date": item.date.toDateString()
+          }
+        })
+
+        const test = new LogInfo({
+          "username": data.username,
+          "count": loggedArray.length,
+          "log": loggedArray,
+        })
+
+        test.save((err, data) => {
+          if (err) {
+            console.log("error saving exercise=> ", err)
+          } else {
+            console.log("saved exercise successfully");
+            res.json({
+              "_id": idToCheck,
+              "username": data.username,
+              "count": data.count,
+              "log": loggedArray
+            })
+          }
+        })
+      }
+    })
+  }
+  })
+})
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
