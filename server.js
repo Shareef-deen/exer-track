@@ -101,7 +101,7 @@ users.findById(id, (err, userData)=>{
 
 })
 
-/*
+
 app.get('/api/users/:_id/logs', (req, res)=>{
   const id = req.params._id;
   const {from, to, limit} = req.query;
@@ -148,7 +148,7 @@ app.get('/api/users/:_id/logs', (req, res)=>{
   })
 })
 
-*/
+
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
