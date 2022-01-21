@@ -42,7 +42,7 @@ app.post('/api/users', (req, res)=>{
 
 
 app.get('/api/users', (req, res)=>{
-  more.find({}, (err, data)=>{
+  users.find({}, (err, data)=>{
     if(err) return console.error(err);
     else{
       const staff = JSON.stringify(data);
