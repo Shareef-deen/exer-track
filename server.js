@@ -9,18 +9,18 @@ const {Schema} = mongoose;
 mongoose.connect(process.env.DB_PASS, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //username
-//const schema = new Schema({username: String});
-//const username = mongoose.model("username", schema);
+const UserSchema = new Schema({username: String});
+const users = mongoose.model("username", UserSchema);
 
 //other one
-const plentyshcema = new Schema({
-  username: String,
+const ExerciseShcema = new Schema({
+  userId: {type: String, required: true},
   description: String,
   duration: Number,
   date: { type: Date}
 
 })
-const more = mongoose.model("moer", plentyshcema);
+const exercise = mongoose.model("exercise", ExerciseShcema);
 
 
 app.use(cors())
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 app.post('/api/users', (req, res)=>{
   console.log(req.body.username);
   const user = req.body.username;
-  more.create({username: user}, (err, data)=>{
+  users.create({username: user}, (err, data)=>{
     if (err) return console.error(err);
     res.send(data);
   })
@@ -57,8 +57,9 @@ const id = req.params._id;
 const des = req.body.description;
 const dur = req.body.duration;
 let date = req.body.date;
-console.log(id)
- if (date === ""/* || isNaN(date)*/){
+console.log(req.body)
+console.log(id);
+ if (date === ""){
     date = new Date().toDateString()
   } else {
     date = new Date(date).toDateString()
@@ -66,24 +67,44 @@ console.log(id)
 
 
 
-more.findOneAndUpdate({_id: id},{$set:{ description: des, duration: dur, date: date}},{"new": true, "upsert": true},(err, data)=>{
-  if (err) return console.error(err);
+users.findById(id, (err, userData)=>{
+  if(err) return console.error(err);
   else{
-    
-     res.send({
-       username: data.username,
+    const newExercise = new exercise({
+      userId: id,
+      description: des,
+      duration: dur,
+      date: date
+      
+    })
+
+    newExercise.save((err, exerciseData)=>{
+      if(err || !exerciseData){
+        console.log("error or no data")
+      }
+      else{
+        res.send({
+        username: userData.username,
        description: des,
        duration: parseInt(dur),
-       date: date,_id: id});
+       date: date,_id: id
+        })
+      }
+    })
   }
-  
 })
+
+    
+  
+  
+  
+
 })
 
 app.get('/api/users/:_id/logs', (req, res)=>{
   const id = req.params._id;
   const {from, to, limit} = req.query;
-  more.findById(id, (err, userData)=>{
+  users.findById(id, (err, userData)=>{
     if (err) return console.error(err);
     else{
       let dateObj = {};
@@ -96,7 +117,7 @@ app.get('/api/users/:_id/logs', (req, res)=>{
       }
 
       let filter = {
-        userid: id
+        userId: id
       }
 
       if(from || to ) {
@@ -104,8 +125,9 @@ app.get('/api/users/:_id/logs', (req, res)=>{
       }
 
       let nonNullLimit = limit ? limit : 500
-      more.find(filter).limit(+nonNullLimit).exec((err, data)=>{
+      exercise.find(filter).limit(+nonNullLimit).exec((err, data)=>{
         if(err || !data){
+          console.error(err);
           res.json({error: "error"})
         } 
         else {
@@ -123,10 +145,10 @@ app.get('/api/users/:_id/logs', (req, res)=>{
 
     }
   })
-
-
-  
 })
+
+
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
