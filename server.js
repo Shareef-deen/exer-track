@@ -42,7 +42,7 @@ app.post('/api/users', (req, res)=>{
 
 
 app.get('/api/users', (req, res)=>{
-  more.find({}, (err, data)=>{
+  users.find({}, (err, data)=>{
     if(err) return console.error(err);
     else{
       const staff = JSON.stringify(data);
@@ -147,51 +147,6 @@ app.get('/api/users/:_id/logs', (req, res)=>{
   })
 })
 
-app.get('/api/users/:id/logs', (req, res)=>{
-  const id = req.params.id;
-  const {from, to, limit} = req.query;
-  users.findById(id, (err, userData)=>{
-    if (err) return console.error(err);
-    else{
-      let dateObj = {};
-      if (from) {
-        dateObj["$gte"] = new Date(from);
-      }
-
-      if(to) {
-        dateObj["$lte"] = new Date(to);
-      }
-
-      let filter = {
-        userId: id
-      }
-
-      if(from || to ) {
-        filter.date = dateObj;
-      }
-
-      let nonNullLimit = limit ? limit : 500
-      exercise.find(filter).limit(+nonNullLimit).exec((err, data)=>{
-        if(err || !data){
-          console.error(err);
-          res.json({error: "error"})
-        } 
-        else {
-          const count = data.length;
-          const rawLog = data
-          const {username, _id}= userData
-          const log = rawLog.map((l) => ({
-            description: l.description,
-            duration: parseInt(l.duration),
-            date: l.date.toDateString()
-          }))
-          res.json({username, count, _id,log})
-        }
-      })
-
-    }
-  })
-})
 
 
 
