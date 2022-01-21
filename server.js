@@ -51,6 +51,49 @@ app.get('/api/users', (req, res)=>{
   })
 })
 
+app.post('/api/users/:id/exercises', (req, res)=>{
+//const id = req.body[':_id'];
+const id = req.params._id;
+const des = req.body.description;
+const dur = req.body.duration;
+let date = req.body.date;
+console.log(req.body)
+console.log(id);
+ if (date === ""){
+    date = new Date().toDateString()
+  } else {
+    date = new Date(date).toDateString()
+  }
+
+
+
+users.findById(id, (err, userData)=>{
+  if(err) return console.error(err);
+  else{
+    const newExercise = new exercise({
+      userId: id,
+      description: des,
+      duration: dur,
+      date: date
+      
+    })
+
+    newExercise.save((err, exerciseData)=>{
+      if(err || !exerciseData){
+        console.log("error or no data")
+      }
+      else{
+        res.send({
+        username: userData.username,
+       description: des,
+       duration: parseInt(dur),
+       date: date,_id: id
+        })
+      }
+    })
+  }
+})
+
 app.post('/api/users/:_id/exercises', (req, res)=>{
 //const id = req.body[':_id'];
 const id = req.params._id;
