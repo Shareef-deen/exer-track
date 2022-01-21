@@ -51,49 +51,6 @@ app.get('/api/users', (req, res)=>{
   })
 })
 
-app.post('/api/users/:id/exercises', (req, res)=>{
-//const id = req.body[':_id'];
-const id = req.params._id;
-const des = req.body.description;
-const dur = req.body.duration;
-let date = req.body.date;
-console.log(req.body)
-console.log(id);
- if (date === ""){
-    date = new Date().toDateString()
-  } else {
-    date = new Date(date).toDateString()
-  }
-
-
-
-users.findById(id, (err, userData)=>{
-  if(err) return console.error(err);
-  else{
-    const newExercise = new exercise({
-      userId: id,
-      description: des,
-      duration: dur,
-      date: date
-      
-    })
-
-    newExercise.save((err, exerciseData)=>{
-      if(err || !exerciseData){
-        console.log("error or no data")
-      }
-      else{
-        res.send({
-        username: userData.username,
-       description: des,
-       duration: parseInt(dur),
-       date: date,_id: id
-        })
-      }
-    })
-  }
-})
-
 app.post('/api/users/:_id/exercises', (req, res)=>{
 //const id = req.body[':_id'];
 const id = req.params._id;
@@ -137,12 +94,6 @@ users.findById(id, (err, userData)=>{
   }
 })
 
-    
-  
-  
-  
-
-})
 
 app.get('/api/users/:_id/logs', (req, res)=>{
   const id = req.params._id;
@@ -191,6 +142,51 @@ app.get('/api/users/:_id/logs', (req, res)=>{
 })
 
 
+app.get('/api/users/:id/logs', (req, res)=>{
+  const id = req.params.id;
+  const {from, to, limit} = req.query;
+  users.findById(id, (err, userData)=>{
+    if (err) return console.error(err);
+    else{
+      let dateObj = {};
+      if (from) {
+        dateObj["$gte"] = new Date(from);
+      }
+
+      if(to) {
+        dateObj["$lte"] = new Date(to);
+      }
+
+      let filter = {
+        userId: id
+      }
+
+      if(from || to ) {
+        filter.date = dateObj;
+      }
+
+      let nonNullLimit = limit ? limit : 500
+      exercise.find(filter).limit(+nonNullLimit).exec((err, data)=>{
+        if(err || !data){
+          console.error(err);
+          res.json({error: "error"})
+        } 
+        else {
+          const count = data.length;
+          const rawLog = data
+          const {username, _id}= userData
+          const log = rawLog.map((l) => ({
+            description: l.description,
+            duration: parseInt(l.duration),
+            date: l.date.toDateString()
+          }))
+          res.json({username, count, _id,log})
+        }
+      })
+
+    }
+  })
+})
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
