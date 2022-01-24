@@ -80,6 +80,7 @@ users.findById(id, (err, userData)=>{
 
     newExercise.save((err, exerciseData)=>{
       if(err || !exerciseData){
+        console.error(err);
         console.log("error or no data")
       }
       else{
