@@ -59,15 +59,11 @@ const dur = req.body.duration;
 let date = req.body.date;
 console.log(req.body)
 console.log(id);
- if (date === ""){
-    date = new Date().toDateString()
-  } 
-else if(date === "Invalid Date"){
-        date = new Date().toDateString()
-
+if (date instanceof Date){
+    date = new Date(date).toDateString()
   }
   else {
-    date = new Date(date).toDateString()
+    date = new Date().toDateString()
   }
 
 
