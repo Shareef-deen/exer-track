@@ -61,7 +61,12 @@ console.log(req.body)
 console.log(id);
  if (date === ""){
     date = new Date().toDateString()
-  } else {
+  } 
+else if(date === 'undefined'){
+        date = new Date().toDateString()
+
+  }
+  else {
     date = new Date(date).toDateString()
   }
 
