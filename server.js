@@ -59,7 +59,7 @@ const dur = req.body.duration;
 let date = req.body.date;
 console.log(req.body)
 console.log(id);
-if (date instanceof Date){
+if (date instanceof Date && !isNan(date)){
     date = new Date(date).toDateString()
   }
   else {
