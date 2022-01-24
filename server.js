@@ -101,7 +101,7 @@ users.findById(id, (err, userData)=>{
 
 })
 
-/*
+
 app.get('/api/users/:_id/logs', (req, res)=>{
   const id = req.params._id;
   const {from, to, limit} = req.query;
@@ -148,44 +148,7 @@ app.get('/api/users/:_id/logs', (req, res)=>{
   })
 })
 
-*/
 
-app.get("/api/users/:_id/logs", async (req, res) => {
-
-  const theId = req.params._id;
-  const theLimit = Number(req.query.limit) || 0;
-  const theFrom = req.query.from || new Date(0);
-  const theTo = req.query.to || new Date(Date.now());
-  
-  let theUser = await users.findById(theId).exec();
-  let userLog = await exercise.find({ 
-    userid: theId, 
-    date: { $gte: theFrom , $lte: theTo } })
-    .select("-_id -userid -__v")
-    .limit(theLimit)
-    .exec();
-
-  //console.log(userLog.userid);
-  //console.log(theId);
-
-  // This is to convert the date to a string for each date in the array
-  const newLog = userLog.map(each => {
-    return {
-      description: each.description,
-      duration: each.duration,
-      date: new Date(each.date).toDateString()
-    }
-  })
-
-  //console.log(newLog);
-
-  res.json({
-    _id: theUser._id,
-    username: theUser.username,
-    count: userLog.length,
-    log: newLog
-  });
-});
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {
