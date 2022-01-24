@@ -84,7 +84,9 @@ users.findById(id, (err, userData)=>{
         console.error(err);
         console.log("error or no data")
       }
-      else{
+      else{      
+        console.log(userData+ " " + exerciseData)
+
         res.json({
         username: userData.username,
        description: des,
