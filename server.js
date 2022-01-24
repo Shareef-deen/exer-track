@@ -62,7 +62,7 @@ console.log(id);
 if (date instanceof Date ){
     date = new Date(date).toDateString()
   }
-  else if (date === "") {
+  else {
     date = new Date().toDateString()
   }
 
