@@ -85,7 +85,7 @@ users.findById(id, (err, userData)=>{
         console.log("error or no data")
       }
       else{
-        res.send({
+        res.json({
         username: userData.username,
        description: des,
        duration: parseInt(dur),
