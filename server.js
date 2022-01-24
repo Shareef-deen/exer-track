@@ -59,14 +59,14 @@ const dur = req.body.duration;
 let date = req.body.date;
 console.log(req.body)
 console.log(id);
-if (date instanceof Date && !isNan(date)){
+if (date instanceof Date ){
     date = new Date(date).toDateString()
   }
-  else {
+  else if (date === "") {
     date = new Date().toDateString()
   }
 
-
+console.log(date)
 
 users.findById(id, (err, userData)=>{
   if(err) return console.error(err);
@@ -84,15 +84,14 @@ users.findById(id, (err, userData)=>{
         console.error(err);
         console.log("error or no data")
       }
-      else{      
-        console.log(exerciseData);
-
+      else{
         res.json({
         username: userData.username,
        description: des,
        duration: parseInt(dur),
        date: date,_id: id
         })
+        console.log(userData+ " " + exerciseData)
       }
     })
   }
