@@ -50,7 +50,7 @@ app.get('/api/users', (req, res)=>{
     }
   })
 })
-
+/*
 app.post('/api/users/:_id/exercises', (req, res)=>{
 //const id = req.body[':_id'];
 const id = req.params._id;
@@ -103,6 +103,57 @@ users.findById(id, (err, userData)=>{
   
 
 })
+
+*/
+
+
+app.post('/api/users/:_id/exercises', (req, res) => {
+  let idJson = { "id": req.params._id};
+  let checkedDate = new Date(req.body.date);
+  let idToCheck = idJson.id;
+
+  let noDateHandler = () => {
+    if (checkedDate instanceof Date && !isNaN(checkedDate)) {
+      return checkedDate
+    } else {
+      checkedDate = new Date();
+    }
+  }
+
+  users.findById(idToCheck, (err, data) => {
+    noDateHandler(checkedDate);
+
+    if (err) {
+      console.log("error with id=> ", err);
+    } else {
+      const test = new exercise({
+        "userId": idToCheck,
+        "username": data.username,
+        "description": req.body.description,
+        "duration": req.body.duration,
+        "date": checkedDate.toDateString(),
+      })
+
+      test.save((err, data) => {
+        if (err) {
+          console.log("error saving=> ", err);
+        } else {
+          console.log("saved exercise successfully");
+          res.json({
+            "_id": idToCheck,
+            "username": data.username,
+            "description": data.description,
+            "duration": data.duration,
+            "date": data.date.toDateString(),
+          })
+        }
+      })
+    }
+  })
+})
+
+
+
 
 
 app.get('/api/users/:_id/logs', (req, res)=>{
