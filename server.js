@@ -62,7 +62,7 @@ console.log(id);
  if (date === ""){
     date = new Date().toDateString()
   } 
-else if(date === 'undefined'){
+else if(date === 'Invalid Date'){
         date = new Date().toDateString()
 
   }
