@@ -147,6 +147,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
             "duration": data.duration,
             "date": data.date.toDateString(),
           })*/
+          
           let ret={
             "_id": idToCheck,
             "username": data.username,
@@ -155,7 +156,8 @@ app.post('/api/users/:_id/exercises', (req, res) => {
             "date": data.date.toDateString(),
           }
           console.log(ret);
-          res.json(ret)
+          res.json(ret);
+          
         }
       })
     }
