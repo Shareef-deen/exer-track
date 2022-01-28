@@ -108,9 +108,9 @@ users.findById(id, (err, userData)=>{
 
 
 app.post('/api/users/:_id/exercises', (req, res) => {
-  let idJson = { "id": req.params._id};
+  let id = req.params._id;
   let checkedDate = new Date(req.body.date);
-  let idToCheck = idJson.id;
+  let idToCheck = id;
 
   let noDateHandler = () => {
     if (checkedDate instanceof Date && !isNaN(checkedDate)) {
