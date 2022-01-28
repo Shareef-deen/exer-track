@@ -139,6 +139,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
           console.log("error saving=> ", err);
         } else {
           console.log("saved exercise successfully");
+          console.log(data);
           res.json({
             "_id": idToCheck,
             "username": data.username,
