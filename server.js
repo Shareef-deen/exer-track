@@ -120,7 +120,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     }
   }
 
-  users.findById(idToCheck, (err, data) => {
+  users.findById(idToCheck, (err, userdata) => {
     noDateHandler(checkedDate);
 
     if (err) {
@@ -128,7 +128,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     } else {
       const test = new exercise({
         "userId": idToCheck,
-        "username": data.username,
+        "username": userdata.username,
         "description": req.body.description,
         "duration": req.body.duration,
         "date": checkedDate.toDateString(),
@@ -150,7 +150,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
           
           let ret={
             "_id": idToCheck,
-            "username": data.username,
+            "username": userdata.username,
             "description": data.description,
             "duration": data.duration,
             "date": data.date.toDateString(),
